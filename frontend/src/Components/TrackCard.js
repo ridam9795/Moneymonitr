@@ -1,7 +1,13 @@
 import React from "react";
 
-function TrackCard() {
-  return <div>TrackCard</div>;
+function TrackCard(props) {
+  return (
+    <div className="item">
+      {props.category} price: {props.amount}
+      {props.currency} {props.date.getDate()}
+      {props.date.getMonth()}
+    </div>
+  );
 }
 
 export default TrackCard;

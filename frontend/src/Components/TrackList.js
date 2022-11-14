@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Modal from "react-modal";
 import {
   Button,
@@ -9,6 +9,7 @@ import {
   FormText,
   Col,
 } from "reactstrap";
+import TrackCard from "./TrackCard";
 
 const customStyles = {
   content: {
@@ -27,9 +28,25 @@ const customStyles = {
 };
 function TrackList(props) {
   console.log("track", props);
+  const categoryRef = useRef(null);
+  const currencyRef = useRef(null);
+  const amountRef = useRef(null);
   const [itemList, setItemList] = useState([]);
   const [modalIsOpen, setIsOpen] = React.useState(false);
-
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   function openModal() {
     setIsOpen(true);
   }
@@ -37,7 +54,27 @@ function TrackList(props) {
   function closeModal() {
     setIsOpen(false);
   }
-  const handleClick = () => {};
+  const handleSave = () => {
+    const category = categoryRef.current.value;
+    const currency = currencyRef.current.value;
+    const amount = amountRef.current.value;
+    const date = new Date();
+    console.log(
+      category + " " + currency + " " + amount + " ",
+      date.getDate(),
+      " ",
+      months[date.getMonth()] + " ",
+      date.getFullYear()
+    );
+    let data = {
+      category: category,
+      currency: currency,
+      amount: amount,
+      date: date,
+    };
+    setItemList([...itemList, data]);
+    closeModal();
+  };
   return (
     <div>
       <div>
@@ -47,6 +84,18 @@ function TrackList(props) {
           Add {props.name}
         </Button>
       </div>
+      {itemList.map((item, index) => {
+        return (
+          <div key={index} className="itemList">
+            <TrackCard
+              category={item.category}
+              currency={item.currency}
+              amount={item.amount}
+              date={item.date}
+            />
+          </div>
+        );
+      })}
       <div>
         <Modal
           isOpen={modalIsOpen}
@@ -60,11 +109,16 @@ function TrackList(props) {
             <Form>
               <FormGroup>
                 <Label>Category Name</Label>
-                <Input type="text" />
+                <Input type="text" innerRef={categoryRef} />
               </FormGroup>
               <FormGroup>
                 <Label for="currency">Select Currency</Label>
-                <Input type="select" name="select" id="currency">
+                <Input
+                  type="select"
+                  name="select"
+                  id="currency"
+                  innerRef={currencyRef}
+                >
                   <option>inr</option>
                   <option>dollar</option>
                   <option>yen</option>
@@ -74,10 +128,10 @@ function TrackList(props) {
               </FormGroup>
               <FormGroup>
                 <Label>Amount</Label>
-                <Input type="number" />
+                <Input type="number" innerRef={amountRef} />
               </FormGroup>
               <FormGroup style={{ justifyContent: "center" }}>
-                <Button color="success" block>
+                <Button color="success" block onClick={handleSave}>
                   Save
                 </Button>
               </FormGroup>

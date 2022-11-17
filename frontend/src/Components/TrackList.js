@@ -10,6 +10,13 @@ import {
   Col,
 } from "reactstrap";
 import TrackCard from "./TrackCard";
+import { connect } from "react-redux";
+import {
+  addBill,
+  addEmi,
+  addExpense,
+  addInvestment,
+} from "../redux/moneyAction";
 
 const customStyles = {
   content: {
@@ -49,25 +56,29 @@ function TrackList(props) {
   const updateList = (data) => {
     const currCat = props.name;
     if (currCat == "Expense") {
-      setExpenseList([...expenseList, data]);
+      //setExpenseList([...expenseList, data]);
+      props.addExpense(data);
     } else if (currCat == "Investment") {
-      setInvestmentList([...investmentList, data]);
+      // setInvestmentList([...investmentList, data]);
+      props.addInvestment(data);
     } else if (currCat == "Bill") {
-      setBillList([...billList, data]);
-    } else if ((currCat = "EMI")) {
-      setEmiList([...emiList, data]);
+      //setBillList([...billList, data]);
+      props.addBill(data);
+    } else if (currCat == "EMI") {
+      //setEmiList([...emiList, data]);
+      props.addEmi(data);
     }
   };
   const getCurrertList = () => {
     const currCat = props.name;
     if (currCat == "Expense") {
-      return expenseList;
+      return props.expense;
     } else if (currCat == "Investment") {
-      return investmentList;
+      return props.investment;
     } else if (currCat == "Bill") {
-      return billList;
+      return props.bill;
     } else if (currCat == "EMI") {
-      return emiList;
+      return props.emi;
     }
   };
 
@@ -91,7 +102,6 @@ function TrackList(props) {
     <div>
       <div>
         <h2 className="heading">Track your {props.name}</h2>
-
         <Button color="primary" onClick={openModal}>
           Add {props.name}
         </Button>
@@ -152,4 +162,22 @@ function TrackList(props) {
   );
 }
 
-export default TrackList;
+const mapStateToProps = (state) => {
+  return {
+    expense: state.expense,
+    bill: state.bill,
+    investment: state.investment,
+    emi: state.emi,
+    totalSpending: state.totalSpending,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addExpense: (data) => dispatch(addExpense(data)),
+    addBill: (data) => dispatch(addBill(data)),
+    addInvestment: (data) => dispatch(addInvestment(data)),
+    addEmi: (data) => dispatch(addEmi(data)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TrackList);

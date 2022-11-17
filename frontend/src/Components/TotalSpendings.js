@@ -1,7 +1,12 @@
 import React from "react";
-
-function Totalspendings() {
-  return <div>Totalspendings</div>;
+import { connect } from "react-redux";
+function Totalspendings(props) {
+  return <div>Totalspendings {props.totalSpending}</div>;
 }
+const mapStateToProps = (state) => {
+  return {
+    totalSpending: state.totalSpending,
+  };
+};
 
-export default Totalspendings;
+export default connect(mapStateToProps, null)(Totalspendings);

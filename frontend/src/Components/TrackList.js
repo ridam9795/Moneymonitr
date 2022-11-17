@@ -33,20 +33,7 @@ function TrackList(props) {
   const amountRef = useRef(null);
   const [itemList, setItemList] = useState([]);
   const [modalIsOpen, setIsOpen] = React.useState(false);
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
+
   function openModal() {
     setIsOpen(true);
   }
@@ -59,13 +46,7 @@ function TrackList(props) {
     const currency = currencyRef.current.value;
     const amount = amountRef.current.value;
     const date = new Date();
-    console.log(
-      category + " " + currency + " " + amount + " ",
-      date.getDate(),
-      " ",
-      months[date.getMonth()] + " ",
-      date.getFullYear()
-    );
+
     let data = {
       category: category,
       currency: currency,
@@ -121,9 +102,6 @@ function TrackList(props) {
                 >
                   <option>inr</option>
                   <option>dollar</option>
-                  <option>yen</option>
-                  <option>euro</option>
-                  <option>Egyptian pound</option>
                 </Input>
               </FormGroup>
               <FormGroup>

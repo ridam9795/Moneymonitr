@@ -11,7 +11,7 @@ function App() {
     <div className="App">
       <Header />
       <Routes>
-        <Route path="/" element={<TrackList name="expense" />}></Route>
+        <Route path="/" element={<TrackList name="Expense" />}></Route>
         <Route
           path="/investment"
           element={<TrackList name="Investment" />}

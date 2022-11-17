@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import Modal from "react-modal";
 import {
   Button,
@@ -31,7 +31,12 @@ function TrackList(props) {
   const categoryRef = useRef(null);
   const currencyRef = useRef(null);
   const amountRef = useRef(null);
-  const [itemList, setItemList] = useState([]);
+  const [expenseList, setExpenseList] = useState([]);
+  const [investmentList, setInvestmentList] = useState([]);
+  const [billList, setBillList] = useState([]);
+  const [emiList, setEmiList] = useState([]);
+  const [isUpdated, setIsUpdated] = useState(false);
+
   const [modalIsOpen, setIsOpen] = React.useState(false);
 
   function openModal() {
@@ -41,6 +46,31 @@ function TrackList(props) {
   function closeModal() {
     setIsOpen(false);
   }
+  const updateList = (data) => {
+    const currCat = props.name;
+    if (currCat == "Expense") {
+      setExpenseList([...expenseList, data]);
+    } else if (currCat == "Investment") {
+      setInvestmentList([...investmentList, data]);
+    } else if (currCat == "Bill") {
+      setBillList([...billList, data]);
+    } else if ((currCat = "EMI")) {
+      setEmiList([...emiList, data]);
+    }
+  };
+  const getCurrertList = () => {
+    const currCat = props.name;
+    if (currCat == "Expense") {
+      return expenseList;
+    } else if (currCat == "Investment") {
+      return investmentList;
+    } else if (currCat == "Bill") {
+      return billList;
+    } else if (currCat == "EMI") {
+      return emiList;
+    }
+  };
+
   const handleSave = () => {
     const category = categoryRef.current.value;
     const currency = currencyRef.current.value;
@@ -53,7 +83,8 @@ function TrackList(props) {
       amount: amount,
       date: date,
     };
-    setItemList([...itemList, data]);
+
+    updateList(data);
     closeModal();
   };
   return (
@@ -65,7 +96,7 @@ function TrackList(props) {
           Add {props.name}
         </Button>
       </div>
-      {itemList.map((item, index) => {
+      {getCurrertList().map((item, index) => {
         return (
           <div key={index} className="itemList">
             <TrackCard
